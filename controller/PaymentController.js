@@ -101,7 +101,38 @@ exports.paystack = async (req, res) => {
     });
   res.status(200).json({ data: req.body });
 };
-
+exports.demoPayStack = async(req,res)=>{
+  const jobdata = await getUser(req.body.milestone.jobId);
+    // Default demo data
+    const demoTransactionData = {
+      milestone_id: req.body.milestone.mileid,
+      user_id: jobdata.client_id,
+      reference: "default_reference",
+      amount: req.body.milestone.amount / 100,
+      commission_rate: "10", // Fixed commission rate for demo
+      response: { status: "success" }, // Demo response
+      status: "success", // Demo status
+      payment_gateway: "demopayment", // Default payment gateway
+      type: "Released",
+      description: jobdata.contract_title,
+      professional_user_id: jobdata.professional_id, // Should be a valid ObjectId
+      operation_user_id: jobdata.client_id,
+      response_text: "success",
+    };
+  
+    // Create a new transaction document
+    const newTransaction = new Transaction(demoTransactionData);
+  
+    try {
+      const savedTransaction = await newTransaction.save();
+      console.log("Demo Transaction saved successfully:", savedTransaction);
+      res.status(201).json({ message: "Demo transaction created successfully", data: savedTransaction });
+    } catch (error) {
+      console.error("Error saving demo transaction:", error);
+      res.status(500).json({ message: "Error creating demo transaction", error });
+    }
+  
+}
 exports.paystackCallback = async (req, res) => {
   const PAYSTACK_API_URL = "https://api.paystack.co/payment/data";
 

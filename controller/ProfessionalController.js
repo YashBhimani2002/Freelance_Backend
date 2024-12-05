@@ -1900,6 +1900,8 @@ async function my_application_detail(jobid, res, req) {
 const transaction_history = async (req, res) => {
   try {
     // Extract user ID from the request parameters
+    console.log(req.user._id,req.user.login_as);
+    
     const userId = req.user._id;
     const userRole = req.user.login_as;
     // Fetch transaction data from the database for the specified user

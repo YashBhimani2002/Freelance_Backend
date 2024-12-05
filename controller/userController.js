@@ -1050,7 +1050,6 @@ exports.getCategories = async (req, res, next) => {
     const categories = await Category.find({ status: { $in: [1, "1"] } })
       .select("_id name status createdAt")
       .lean();
-
     res.status(200).json(categories);
   } catch (error) {
     console.error(error);
